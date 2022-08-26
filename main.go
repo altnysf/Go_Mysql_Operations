@@ -9,14 +9,14 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("mysql", "root:123456@/golangdb")
+	db, err := sql.Open("mysql", "root:12345@/golangdb")
 	if err != nil {
 		panic(err.Error())
 	}
 
 	defer db.Close()
 
-	createStatement := "`users` (`ID` INT(11) NOT NULL AUTO_INCREMENT,`Username` varchar(45) NOT NULL,`Email` varchar(45) NOT NULL,`Password` varchar(45) NOT NULL,`FirstName` varchar(45) NOT NULL,`LastName` varchar(45) NOT NULL,`BirthDate` varchar(45) DEFAULT NULL,`IsActive` tinyint(1) DEFAULT NULL,PRIMARY KEY (`ID`),UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE)	  ENGINE = InnoDBDEFAULT CHARACTER SET = utf8;"
+	createStatement := "`users` (`ID` INT(11) NOT NULL AUTO_INCREMENT,`Username` varchar(45) NOT NULL,`Email` varchar(45) NOT NULL,`Password` varchar(45) NOT NULL,`FirstName` varchar(45) NOT NULL,`LastName` varchar(45) NOT NULL,`BirthDate` varchar(45) DEFAULT NULL,`IsActive` tinyint(1) DEFAULT NULL,PRIMARY KEY (`ID`),UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;"
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS " + createStatement)
 
 	if err != nil {
@@ -24,7 +24,7 @@ func main() {
 	}
 
 	// ADD DATA
-	res, err := db.Exec("INSERT INTO users(Username,Email,Password,FirstName,LastName,BirthDate,IsActive) VALUES('DenemeUser','webmail@deneme.com','1234+-','Yusuf','ALTUN','2017.1.1',1)")
+	res, err := db.Exec("INSERT INTO users(Username,Email,Password,FirstName,LastName,BirthDate,IsActive) VALUES('DenemeUser7','webmail@deneme.com','1234+-','DenemeName7','DenemeSurname7','2017.1.1',1)")
 
 	if err != nil {
 		log.Fatal(err)
@@ -65,4 +65,33 @@ func main() {
 		log.Printf("Bulunan Satır İçeriği : %q", strconv.Itoa(ID)+" "+Username+" "+Email+" "+Password+" "+FirstName+" "+LastName+" "+BirthDate+" "+strconv.FormatBool(IsActive))
 
 	}
+
+	// UPDATE DATA
+
+	upt, errUpt := db.Exec("UPDATE users set FirstName =?, LastName =? WHERE id = ?", "DenemeName", "DenemeSurname", 1)
+
+	if errUpt != nil {
+		log.Fatal(errUpt)
+	}
+
+	rowCount, errUpt1 := upt.RowsAffected()
+	if err != nil {
+		log.Fatal(errUpt1)
+	}
+	log.Printf("Inserted %d Rows", rowCount)
+
+	// DELETE DATA
+
+	del, errDel := db.Exec("DELETE FROM users WHERE id =?", 3)
+
+	if errDel != nil {
+		log.Fatal(errDel)
+	}
+
+	rowCount, errDel1 := del.RowsAffected()
+	if err != nil {
+		log.Fatal(errDel1)
+	}
+	log.Printf("Inserted %d Rows", rowCount)
+
 }
