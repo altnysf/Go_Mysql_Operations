@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("mysql", "root:toor1234@/golangdb")
+	db, err := sql.Open("mysql", "root:123456@/golangdb")
 	if err != nil {
 		panic(err.Error())
 	}
